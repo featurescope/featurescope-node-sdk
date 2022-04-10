@@ -9,8 +9,10 @@ export type JsonValue =
   | Array<JsonValue>
   | { [key: string]: JsonValue }
 
+export type Features = Record<string, JsonValue>
+
 export interface FeaturesClientOptions {
-  apiKey: string
+  apiKey: string | null
   headers?: { [key: string]: string }
 }
 
@@ -28,12 +30,12 @@ export class FeaturesClientNotImplementedError extends Error {
   }
 }
 
-export function init(options: FeaturesClientOptions | string) {
+export function init(options: FeaturesClientOptions | string | null) {
   if (typeof options === "string") options = { apiKey: options, headers: {} }
 
-  const { apiKey } = options
+  const apiKey = options?.apiKey ?? null
   const headers: { [key: string]: string } = {
-    ...(options.headers || {}),
+    ...(options?.headers || {}),
     "Content-Type": "application/json",
   }
 
@@ -81,7 +83,7 @@ export function init(options: FeaturesClientOptions | string) {
     scope: string = "_",
     featureIds?: Array<string>,
     demographics: Demographics = {},
-  ): Promise<Record<string, JsonValue>> => {
+  ): Promise<Features> => {
     const params = new URLSearchParams({ scope, ...demographics })
 
     if (Array.isArray(featureIds))
