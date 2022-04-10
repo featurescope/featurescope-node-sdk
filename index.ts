@@ -41,10 +41,7 @@ export function init(options: FeaturesClientOptions | string) {
     headers.Authorization = `Bearer ${apiKey}`
   }
 
-  const fetcher = async (
-    path: string,
-    options: RequestInit = {},
-  ): Promise<any> =>
+  const fetcher = (path: string, options: RequestInit = {}): Promise<any> =>
     fetch(`${url}${path}`, {
       ...options,
       headers,
