@@ -1,7 +1,7 @@
 {
   "name": "@featurescope/node-sdk",
   "version": "0.0.5",
-  "description": "",
+  "description": "Node.js SDK for featurescope.",
   "main": "index.js",
   "types": "index.d.ts",
   "publishConfig": {
