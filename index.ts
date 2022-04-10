@@ -13,10 +13,11 @@ export type Features = Record<string, JsonValue>
 
 export interface FeaturesClientOptions {
   apiKey: string | null
+  apiUrl?: string
   headers?: { [key: string]: string }
 }
 
-const url = "https://www.featurescope.io"
+const DEFAULT_API_URL = "https://www.featurescope.io"
 
 export class FeaturesClientInitError extends Error {
   constructor(message: string) {
@@ -31,9 +32,16 @@ export class FeaturesClientNotImplementedError extends Error {
 }
 
 export function init(options: FeaturesClientOptions | string | null) {
-  if (typeof options === "string") options = { apiKey: options, headers: {} }
+  if (typeof options === "string") {
+    options = {
+      apiKey: options,
+      apiUrl: DEFAULT_API_URL,
+      headers: {},
+    }
+  }
 
   const apiKey = options?.apiKey ?? null
+  const apiUrl = options?.apiUrl ?? DEFAULT_API_URL
   const headers: { [key: string]: string } = {
     ...(options?.headers || {}),
     "Content-Type": "application/json",
@@ -44,7 +52,7 @@ export function init(options: FeaturesClientOptions | string | null) {
   }
 
   const fetcher = (path: string, options: RequestInit = {}): Promise<any> =>
-    fetch(`${url}${path}`, {
+    fetch(`${apiUrl}${path}`, {
       ...options,
       headers,
       method: options.method || "get",
@@ -75,7 +83,7 @@ export function init(options: FeaturesClientOptions | string | null) {
   }
 
   const listFeaturesForScope = (scope: string): Promise<Array<string>> =>
-    fetcher(`api/v1/features?scope=${scope}`)
+    fetcher(`/api/v1/features?scope=${scope}`)
   const listScopesForUser = (): Promise<Array<string>> =>
     fetcher("/api/v1/scopes")
 
