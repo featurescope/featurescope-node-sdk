@@ -15,9 +15,11 @@ export interface FeaturesClientOptions {
   apiKey: string | null
   apiUrl?: string
   headers?: { [key: string]: string }
+  scope?: string
 }
 
 const DEFAULT_API_URL = "https://www.featurescope.io"
+const DEFAULT_SCOPE = "_"
 
 export class FeaturesClientInitError extends Error {
   constructor(message: string) {
@@ -37,6 +39,7 @@ export function init(options: FeaturesClientOptions | string | null) {
       apiKey: options,
       apiUrl: DEFAULT_API_URL,
       headers: {},
+      scope: DEFAULT_SCOPE,
     }
   }
 
@@ -46,6 +49,7 @@ export function init(options: FeaturesClientOptions | string | null) {
     ...(options?.headers || {}),
     "Content-Type": "application/json",
   }
+  const scope = options?.scope ?? DEFAULT_SCOPE
 
   if (apiKey) {
     headers.Authorization = `Bearer ${apiKey}`
@@ -69,46 +73,45 @@ export function init(options: FeaturesClientOptions | string | null) {
         return data
       })
 
-  const createFeatureVariations = () => {
-    throw new FeaturesClientNotImplementedError("createFeatureVariations")
-  }
   const createFeatureVariation = () => {
     throw new FeaturesClientNotImplementedError("createFeatureVariations")
   }
-  const getAllVariationsForFeaturesList = () => {
+  const createFeatureVariations = () => {
     throw new FeaturesClientNotImplementedError("createFeatureVariations")
   }
   const getAllVariationsForFeature = () => {
     throw new FeaturesClientNotImplementedError("getAllVariationsForFeature")
   }
+  const getAllVariationsForFeaturesList = () => {
+    throw new FeaturesClientNotImplementedError("createFeatureVariations")
+  }
 
-  const listFeaturesForScope = (scope: string): Promise<Array<string>> =>
-    fetcher(`/api/v1/features?scope=${scope}`)
   const listScopesForUser = (): Promise<Array<string>> =>
     fetcher("/api/v1/scopes")
 
+  const listFeaturesForScope = (scope: string): Promise<Array<string>> =>
+    fetcher(`/api/v1/features?scope=${scope}`)
+
   const findFeaturesListVariationsByDemographics = (
-    scope: string = "_",
-    featureIds?: Array<string>,
     demographics: Demographics = {},
+    options?: { featureIds?: Array<string> },
   ): Promise<Features> => {
     const params = new URLSearchParams({ scope, ...demographics })
 
-    if (Array.isArray(featureIds))
-      params.set("featureIds", featureIds.join(","))
+    if (options && Array.isArray(options.featureIds)) {
+      params.set("featureIds", options.featureIds.join(","))
+    }
+
     return fetcher(`/api/v1/variations?${params}`)
   }
 
   const findFeatureVariationByDemographics = (
-    scope: string = "_",
     featureId: string,
     demographics: Demographics = {},
   ): Promise<JsonValue> =>
-    findFeaturesListVariationsByDemographics(
-      scope,
-      [featureId],
-      demographics,
-    ).then((variationsByFeatureId) => variationsByFeatureId[featureId])
+    findFeaturesListVariationsByDemographics(demographics, {
+      featureIds: [featureId],
+    }).then((variationsByFeatureId) => variationsByFeatureId[featureId])
 
   return {
     createFeatureVariation,
@@ -117,6 +120,8 @@ export function init(options: FeaturesClientOptions | string | null) {
     findFeaturesListVariationsByDemographics,
     getAllVariationsForFeature,
     getAllVariationsForFeaturesList,
+    getFeature: findFeatureVariationByDemographics,
+    getFeatures: findFeaturesListVariationsByDemographics,
     listFeaturesForScope,
     listScopesForUser,
   }
