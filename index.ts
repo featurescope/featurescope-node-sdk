@@ -1,6 +1,6 @@
 import fetch from "cross-fetch"
 
-export type Demographics = Record<string, number | string>
+export type Attributes = Record<string, number | string>
 
 export type JsonValue =
   | number
@@ -92,11 +92,11 @@ export function init(options: FeaturesClientOptions | string | null) {
   const listFeaturesForScope = (scope: string): Promise<Array<string>> =>
     fetcher(`/api/v1/features?scope=${scope}`)
 
-  const findFeaturesListVariationsByDemographics = (
-    demographics: Demographics = {},
+  const findFeaturesListVariationsByAttributes = (
+    attributes: Attributes = {},
     options?: { featureIds?: Array<string> },
   ): Promise<Features> => {
-    const params = new URLSearchParams({ scope, ...demographics })
+    const params = new URLSearchParams({ scope, ...attributes })
 
     if (options && Array.isArray(options.featureIds)) {
       params.set("featureIds", options.featureIds.join(","))
@@ -105,23 +105,23 @@ export function init(options: FeaturesClientOptions | string | null) {
     return fetcher(`/api/v1/variations?${params}`)
   }
 
-  const findFeatureVariationByDemographics = (
+  const findFeatureVariationByAttributes = (
     featureId: string,
-    demographics: Demographics = {},
+    attributes: Attributes = {},
   ): Promise<JsonValue> =>
-    findFeaturesListVariationsByDemographics(demographics, {
+    findFeaturesListVariationsByAttributes(attributes, {
       featureIds: [featureId],
     }).then((variationsByFeatureId) => variationsByFeatureId[featureId])
 
   return {
     createFeatureVariation,
     createFeatureVariations,
-    findFeatureVariationByDemographics,
-    findFeaturesListVariationsByDemographics,
+    findFeatureVariationByAttributes,
+    findFeaturesListVariationsByAttributes,
     getAllVariationsForFeature,
     getAllVariationsForFeaturesList,
-    getFeature: findFeatureVariationByDemographics,
-    getFeatures: findFeaturesListVariationsByDemographics,
+    getFeature: findFeatureVariationByAttributes,
+    getFeatures: findFeaturesListVariationsByAttributes,
     listFeaturesForScope,
     listScopesForUser,
   }

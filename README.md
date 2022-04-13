@@ -54,7 +54,7 @@ All of the configuration options available to the client are described below. Yo
 Alternatively, a specific list of features can be resolved:
 
 ```js
-const { port, useJson } = await client.getFeatures(demographics, {
+const { port, useJson } = await client.getFeatures(attributes, {
   featureIds: ["port", "useJson"],
 })
 ```
@@ -73,32 +73,32 @@ Not implemented.
 
 Not implemented.
 
-### `findFeatureVariationByDemographics`
+### `findFeatureVariationByAttributes`
 
-Fetch a feature variation for a collection demographics. Aliased by `getFeature`.
+Fetch a feature variation for a collection of attributes. Aliased by `getFeature`.
 
 Returns a feature variation:
 
 ```js
-const demographics = { city: "New York", state: "NY" }
-const variation = client.findFeatureVariationByDemographics(
+const attributes = { city: "New York", state: "NY" }
+const variation = client.findFeatureVariationByAttributes(
   "featureId",
-  demographics,
+  attributes,
 )
 
 console.log(variation) // "JsonValue"
 ```
 
-### `findFeaturesListVariationsByDemographics`
+### `findFeaturesListVariationsByAttributes`
 
-Fetch a list of feature variations for a collection demographics. Aliased by `getFeatures`.
+Fetch a list of feature variations for a collection of attributes. Aliased by `getFeatures`.
 
 Returns a collection of feature variations by feature id:
 
 ```js
-const demographics = { city: "New York", state: "NY" }
+const attributes = { city: "New York", state: "NY" }
 const options = { featureIds: ["featureId"] } // optional
-const variationsByFeatureId = client.getFeatures(demographics, options)
+const variationsByFeatureId = client.getFeatures(attributes, options)
 
 console.log(variationsByFeatureId) // { featureId: "JsonValue" }
 ```
@@ -113,27 +113,27 @@ Not implemented.
 
 ### `getFeature`
 
-Fetch a feature variation for a collection demographics. Alias of `findFeatureVariationByDemographics`.
+Fetch a feature variation for a collection of attributes. Alias of `findFeatureVariationByAttributes`.
 
 Returns a feature variation:
 
 ```js
-const demographics = { city: "New York", state: "NY" }
-const variation = client.getFeature("featureId", demographics)
+const attributes = { city: "New York", state: "NY" }
+const variation = client.getFeature("featureId", attributes)
 
 console.log(variation) // "JsonValue"
 ```
 
 ### `getFeatures`
 
-Fetch a list of feature variations for a collection demographics. Alias of `findFeaturesListVariationsByDemographics`.
+Fetch a list of feature variations for a collection of attributes. Alias of `findFeaturesListVariationsByAttributes`.
 
 Returns a collection of feature variations by feature id:
 
 ```js
-const demographics = { city: "New York", state: "NY" }
+const attributes = { city: "New York", state: "NY" }
 const options = { featureIds: ["featureId"] } // optional
-const variationsByFeatureId = client.getFeatures(demographics, options)
+const variationsByFeatureId = client.getFeatures(attributes, options)
 
 console.log(variationsByFeatureId) // { featureId: "JsonValue" }
 ```
@@ -166,8 +166,8 @@ This table includes all of the options available to the client:
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------- |
 | apiKey          | The key to use to connect to the featurescope API.                                                                                                   | string \| null | null                          |
 | apiUrl          | The URL of the featurescope API. Mainly used for testing purposes.                                                                                   | string         | "https://www.featurescope.io" |
+| attributes      | Attributes inform the API which feature variations should be served.                                                                                 | Attributes     | {}                            |
 | children        | React children                                                                                                                                       | React.node     | undefined                     |
 | defaultFeatures | Default values to provide for any potential features. If the API does not return a matching feature by name, then these values will not be replaced. | Features       | {}                            |
-| demographics    | Demographics inform the API which feature variations should be served.                                                                               | Demographics   | {}                            |
 | featureIds      | A list of features to which the providers should be limited.                                                                                         | Array<string>  |                               |
 | scope           | The scope of features which should be loaded by the SDK.                                                                                             | string         | "\_"                          |
