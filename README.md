@@ -2,7 +2,7 @@
 
 Node.js SDK for [featurescope](https://www.featurescope.io).
 
-Featurescope ...
+Featurescope provides simple, reliable, and remotely managed feature-based configuration to power your applications.
 
 ## Installation
 
@@ -20,7 +20,7 @@ In order to use the featurescope Node.js SDK, you'll also have to create a featu
 
 Visit [featurescope.io](https://www.featurescope.io "featurescope.io") and register for a new account.
 
-Next, follow the [quickstart instructions](https://www.featurescope.io/quickstart "quickstart instructions") to get setup on featurescope. These steps will walk you through creating your first feature and fetching it with a featurescope SDK.
+Next, follow the instructions on the [Getting started](https://www.featurescope.io/getting-started "Getting started") page. These steps will walk you through creating your first feature and fetching it with a featurescope SDK.
 
 ## Usage
 
