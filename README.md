@@ -2,7 +2,7 @@
 
 Node.js SDK for [featurescope](https://www.featurescope.io).
 
-Featurescope provides simple, reliable, and remotely managed feature-based configuration to power your applications.
+Featurescope provides simple, reliable, and remotely configurable feature management to power your applications.
 
 ## Installation
 
