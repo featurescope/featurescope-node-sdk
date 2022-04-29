@@ -1,12 +1,9 @@
 {
   "name": "@featurescope/node-sdk",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Node.js SDK for featurescope.",
   "main": "index.js",
   "types": "index.d.ts",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "url": "https://github.com/featurescope/featurescope-node-sdk"
   },
